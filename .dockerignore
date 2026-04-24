@@ -1,0 +1,15 @@
+.git
+.gitignore
+.env
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.db
+.ipynb_checkpoints
+node_modules
+package-lock.json
+scratch
+inspect_*.py
+list_models*.py
+.gemini

@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pydantic
+pandas
+numpy
+httpx
+python-dotenv
+google-cloud-aiplatform[adk,agent_engines]
+google-adk
+google-cloud-discoveryengine
+google-cloud-storage
+google-generativeai
+vertexai

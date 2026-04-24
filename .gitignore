@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+node_modules/
+credentials.json
+.gemini/
+venv/
+.vscode/
+*.log
+.DS_Store

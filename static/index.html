@@ -1,0 +1,2927 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgroSignal — Sell Smarter. Earn More.</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Syne:wght@600..800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --green: #2d7a3a;
+      --green-light: #4caf62;
+      --green-pale: #e8f5eb;
+      --green-mid: #b8ddbf;
+      --amber: #f4a621;
+      --red-soft: #e05c5c;
+      --ink: #1a2218;
+      --ink-mid: #3d4f3a;
+      --ink-light: #6b7f68;
+      --surface: #f7faf7;
+      --white: #ffffff;
+      --card: #ffffff;
+      --border: #ddeedd;
+      --shadow: 0 2px 16px rgba(45, 122, 58, 0.08);
+      --shadow-lg: 0 8px 40px rgba(45, 122, 58, 0.13);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--surface);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(247, 250, 247, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--green);
+    }
+
+    .logo-icon {
+      width: 30px;
+      height: 30px;
+      background: var(--green);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+    }
+
+    .nav-steps {
+      display: flex;
+      gap: 6px;
+    }
+
+    .nav-step {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--ink-light);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-step.active {
+      background: var(--green);
+      color: white;
+    }
+
+    .nav-step:hover:not(.active) {
+      background: var(--green-pale);
+      color: var(--green);
+    }
+
+    /* PAGES */
+    .page {
+      display: none;
+      min-height: 100vh;
+      padding-top: 60px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    #page1.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* PAGE 1 — LANDING */
+    #page1 {
+      background: linear-gradient(135deg, #f0f9f2 0%, #ffffff 50%, #e8f5eb 100%);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      min-height: calc(100vh - 60px);
+      align-items: center;
+      background: linear-gradient(160deg, #ffffff 0%, #f0f9f2 50%, #e4f5e9 100%);
+    }
+
+    .hero-left {
+      padding: 80px 60px 80px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      background: linear-gradient(180deg, #ffffff 0%, #f7fdf8 100%);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-pale);
+      color: var(--green);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      width: fit-content;
+      border: 1px solid var(--green-mid);
+    }
+
+    .hero-badge span {
+      width: 6px;
+      height: 6px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(1.3)
+      }
+    }
+
+    .hero-headline {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+
+    .hero-headline em {
+      color: var(--green);
+      font-style: normal;
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--ink-light);
+      line-height: 1.65;
+      max-width: 420px;
+      font-weight: 400;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 24px;
+    }
+
+    .stat-pill {
+      background: var(--green-pale);
+      border: 1px solid var(--green-mid);
+      border-radius: var(--radius-sm);
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-pill .num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--green);
+    }
+
+    .stat-pill .label {
+      font-size: 0.72rem;
+      color: var(--ink-light);
+      font-weight: 500;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--green);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      width: fit-content;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(45, 122, 58, 0.3);
+      letter-spacing: 0.01em;
+    }
+
+    .cta-btn:hover {
+      background: #245e2d;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(45, 122, 58, 0.35);
+    }
+
+    .cta-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+    }
+
+    .hero-right {
+      background: linear-gradient(135deg, #e8f5eb 0%, #c8ecd0 40%, #a8ddb8 100%);
+      height: 100%;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border-left: 1px solid var(--green-mid);
+    }
+
+    /* PAGE 2 — INPUT */
+    #page2 {
+      background: var(--surface);
+    }
+
+    .input-wrapper {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    .page-header {
+      margin-bottom: 40px;
+    }
+
+    .page-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--green);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--green-pale);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      border: 1px solid var(--green-mid);
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .page-sub {
+      color: var(--ink-light);
+      font-size: 0.95rem;
+    }
+
+    .form-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 40px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group.full {
+      grid-column: 1/-1;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--ink-mid);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .form-input,
+    .form-select {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.93rem;
+      color: var(--ink);
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      border-color: var(--green);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(45, 122, 58, 0.08);
+    }
+
+    .form-select {
+      cursor: pointer;
+    }
+
+    /* Key status banner (replaces the full API key section) */
+    .key-status-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .key-status-banner.ok {
+      background: var(--green-pale);
+      border: 1px solid var(--green-mid);
+      color: var(--green);
+    }
+
+    .key-status-banner.err {
+      background: #fff8e1;
+      border: 1px solid #f4a621;
+      color: #b45309;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: white;
+      padding: 15px 32px;
+      border-radius: 50px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(45, 122, 58, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary:hover {
+      background: #245e2d;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(45, 122, 58, 0.3);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+    }
+
+    /* LOADING */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(247, 250, 247, 0.97);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .loading-overlay.show {
+      display: flex;
+    }
+
+    .loading-spinner {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 4px solid var(--green-mid);
+      border-top-color: var(--green);
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .loading-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .loading-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .loading-step {
+      font-size: 0.82rem;
+      color: var(--ink-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .loading-step.done {
+      color: var(--green);
+    }
+
+    .loading-step .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green-mid);
+    }
+
+    .loading-step.done .step-dot {
+      background: var(--green);
+    }
+
+    .loading-step.active .step-dot {
+      background: var(--amber);
+      animation: pulse 1s infinite;
+    }
+
+    /* PAGE 3 — ANALYSIS */
+    #page3 {
+      background: var(--surface);
+    }
+
+    .analysis-layout {
+      padding: 30px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .summary-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    .summary-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .summary-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--green);
+    }
+
+    .summary-card:nth-child(2)::before {
+      background: var(--amber);
+    }
+
+    .summary-card:nth-child(3)::before {
+      background: var(--green-light);
+    }
+
+    .sc-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--ink-light);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .sc-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .sc-sub {
+      font-size: 0.78rem;
+      color: var(--ink-light);
+    }
+
+    .sc-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--green-pale);
+      color: var(--green);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .map-container {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .map-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .map-header h3 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .map-legend {
+      display: flex;
+      gap: 14px;
+    }
+
+    .leg-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      color: var(--ink-light);
+    }
+
+    .leg-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .leg-dot.high {
+      background: var(--green)
+    }
+
+    .leg-dot.med {
+      background: var(--amber)
+    }
+
+    .leg-dot.low {
+      background: var(--red-soft)
+    }
+
+    .malaysia-map {
+      width: 100%;
+      height: 420px;
+      position: relative;
+      background: linear-gradient(160deg, #e8f5eb 0%, #d4edda 100%);
+      overflow: hidden;
+    }
+
+    /* Rec panel */
+    .rec-box {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .rec-card {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .rec-header {
+      background: var(--green);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rec-header h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .rec-header svg {
+      fill: white;
+      width: 16px;
+      height: 16px;
+    }
+
+    .rec-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .rec-action {
+      background: var(--green-pale);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      border-left: 3px solid var(--green);
+    }
+
+    .rec-action .action-text {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .rec-action .action-sub {
+      font-size: 0.78rem;
+      color: var(--ink-light);
+    }
+
+    .rec-profit {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f0fdf4;
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      border: 1px solid var(--green-mid);
+    }
+
+    .rec-profit .label {
+      font-size: 0.78rem;
+      color: var(--ink-light);
+    }
+
+    .rec-profit .amount {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--green);
+    }
+
+    .rec-reason {
+      font-size: 0.82rem;
+      color: var(--ink-light);
+      line-height: 1.6;
+    }
+
+    .reason-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .reason-chip {
+      background: var(--green-pale);
+      color: var(--green);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      border: 1px solid var(--green-mid);
+    }
+
+    .rec-divider {
+      height: 1px;
+      background: var(--border);
+    }
+
+    .timing-card {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 16px 20px;
+    }
+
+    .timing-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--ink-light);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 10px;
+    }
+
+    .timing-bar {
+      display: flex;
+      gap: 4px;
+    }
+
+    .t-day {
+      flex: 1;
+      height: 36px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.67rem;
+      font-weight: 600;
+      background: var(--green-pale);
+      color: var(--ink-light);
+    }
+
+    .t-day.best {
+      background: var(--green);
+      color: white
+    }
+
+    .t-day.good {
+      background: var(--green-mid);
+      color: var(--green)
+    }
+
+    .next-btn {
+      background: var(--green);
+      color: white;
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .next-btn:hover {
+      background: #245e2d;
+    }
+
+    .next-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: white;
+    }
+
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .gemini-analysis {
+      background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
+      border: 1px solid #c5d3f7;
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-size: 0.82rem;
+      color: #1a2050;
+      line-height: 1.7;
+    }
+
+    /* PAGE 4 — RESULT */
+    #page4 {
+      background: var(--surface);
+    }
+
+    .result-layout {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .profit-hero {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      padding: 50px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profit-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--green), var(--green-light), var(--amber));
+    }
+
+    .profit-deco {
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(45, 122, 58, 0.07) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .profit-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--ink-light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    .profit-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 4.5rem;
+      font-weight: 800;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .profit-period {
+      font-size: 0.9rem;
+      color: var(--ink-light);
+    }
+
+    .compare-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: var(--ink);
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .compare-card {
+      border-radius: var(--radius);
+      padding: 28px;
+      border: 1px solid var(--border);
+    }
+
+    .compare-card.before {
+      background: #fff8f8;
+      border-color: #ffd7d7
+    }
+
+    .compare-card.after {
+      background: #f0fdf4;
+      border-color: var(--green-mid)
+    }
+
+    .cc-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .before .cc-tag {
+      background: #ffebee;
+      color: var(--red-soft)
+    }
+
+    .after .cc-tag {
+      background: var(--green-pale);
+      color: var(--green)
+    }
+
+    .cc-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+
+    .cc-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .cc-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .before .cc-dot {
+      background: var(--red-soft)
+    }
+
+    .after .cc-dot {
+      background: var(--green)
+    }
+
+    .cc-text {
+      font-size: 0.85rem;
+      color: var(--ink-light);
+      line-height: 1.5;
+    }
+
+    .cc-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-top: 16px;
+    }
+
+    .before .cc-price {
+      color: var(--red-soft)
+    }
+
+    .after .cc-price {
+      color: var(--green)
+    }
+
+    .map-summary {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .ms-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ms-header h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .ms-body {
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .route-visual {
+      flex: 1;
+      background: var(--green-pale);
+      border-radius: var(--radius-sm);
+      height: 120px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .route-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 1;
+    }
+
+    .route-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .route-icon.farm {
+      background: white;
+      box-shadow: var(--shadow)
+    }
+
+    .route-icon.market {
+      background: var(--green);
+      box-shadow: 0 4px 12px rgba(45, 122, 58, 0.3)
+    }
+
+    .route-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .route-line {
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green-mid), var(--green));
+      position: relative;
+      margin: 0 10px;
+    }
+
+    .route-line::after {
+      content: '▶';
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--green);
+      font-size: 0.8rem;
+    }
+
+    .route-distance {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -70%);
+      background: white;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--green);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--green-mid);
+    }
+
+    .route-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rs-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .rs-label {
+      font-size: 0.7rem;
+      color: var(--ink-light);
+      font-weight: 500;
+    }
+
+    .rs-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .impact-section {
+      background: var(--green);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .impact-section::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      left: -40px;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+
+    .impact-section::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      right: -40px;
+      width: 250px;
+      height: 250px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+
+    .impact-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .impact-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .impact-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .impact-text {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .impact-chips {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .impact-chip {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .export-btn {
+      background: white;
+      color: var(--green);
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border: 2px solid white;
+      cursor: pointer;
+      margin-top: 16px;
+      position: relative;
+      z-index: 1;
+      transition: all 0.2s;
+    }
+
+    .export-btn:hover {
+      background: var(--green-pale);
+    }
+
+    .restart-btn {
+      background: white;
+      color: var(--green);
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      margin-top: 24px;
+      transition: all 0.2s;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .restart-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .ai-full-analysis {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .ai-analysis-header {
+      background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ai-analysis-header h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .ai-analysis-body {
+      padding: 24px;
+      font-size: 0.88rem;
+      color: var(--ink-light);
+      line-height: 1.8;
+    }
+
+    .ai-analysis-body strong {
+      color: var(--ink);
+    }
+
+    @media (max-width:768px) {
+      .hero {
+        grid-template-columns: 1fr
+      }
+
+      .hero-right {
+        display: none
+      }
+
+      .hero-left {
+        padding: 40px 24px
+      }
+
+      .hero-headline {
+        font-size: 2rem
+      }
+
+      nav {
+        padding: 0 16px
+      }
+
+      .analysis-layout {
+        padding: 16px
+      }
+
+      .main-grid {
+        grid-template-columns: 1fr
+      }
+
+      .compare-grid {
+        grid-template-columns: 1fr
+      }
+
+      .form-row {
+        grid-template-columns: 1fr
+      }
+
+      .form-card {
+        padding: 24px 20px
+      }
+
+      .result-layout {
+        padding: 30px 16px
+      }
+
+      .profit-number {
+        font-size: 3rem
+      }
+
+      .summary-bar {
+        grid-template-columns: 1fr
+      }
+
+      .ms-body {
+        flex-direction: column
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 008 20C19 20 22 3 22 3c-1 2-8 2-8 2s4-2 4-8C18 3 17 8 17 8z" />
+        </svg>
+      </div>
+      AgroSignal
+    </div>
+    <div class="nav-steps">
+      <div class="nav-step active" onclick="goTo(1)">1. Overview</div>
+      <div class="nav-step" onclick="goTo(2)">2. Your Data</div>
+      <div class="nav-step" onclick="goTo(3)">3. Market Map</div>
+      <div class="nav-step" onclick="goTo(4)">4. Results</div>
+    </div>
+  </nav>
+
+  <!-- LOADING -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Analyzing with Gemini AI...</div>
+    <div class="loading-steps">
+      <div class="loading-step" id="step1">
+        <div class="step-dot"></div> Reading crop & harvest data
+      </div>
+      <div class="loading-step" id="step2">
+        <div class="step-dot"></div> Scanning regional demand across Malaysia
+      </div>
+      <div class="loading-step" id="step3">
+        <div class="step-dot"></div> Calculating profit optimization
+      </div>
+      <div class="loading-step" id="step4">
+        <div class="step-dot"></div> Generating AI recommendations
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 1 — LANDING -->
+  <div class="page active" id="page1">
+    <div class="hero">
+      <div class="hero-left">
+        <div class="hero-badge"><span></span> Powered by Gemini AI</div>
+        <h1 class="hero-headline">Find the best place to sell<br>your crops for <em>maximum profit.</em></h1>
+        <p class="hero-sub">AgroSignal uses Gemini AI to analyze demand across Malaysian regions and tells farmers
+          exactly where and when to sell — so you never undersell again.</p>
+        <div class="hero-stats">
+          <div class="stat-pill"><span class="num">+34%</span><span class="label">Avg. Profit Increase</span></div>
+          <div class="stat-pill"><span class="num">13</span><span class="label">Regions Analyzed</span></div>
+          <div class="stat-pill"><span class="num">Gemini</span><span class="label">AI-Powered</span></div>
+        </div>
+        <button class="cta-btn" onclick="goTo(2)">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+          Start Analysis
+        </button>
+      </div>
+      <div class="hero-right">
+        <div id="heroMap" style="width:100%;height:100%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2 — INPUT -->
+  <div class="page" id="page2">
+    <div class="input-wrapper">
+      <div class="page-header">
+        <div class="page-tag">Step 1 of 2</div>
+        <h2 class="page-title">Tell us about your harvest</h2>
+        <p class="page-sub">Enter your crop details and Gemini AI will find you the best selling opportunity.</p>
+      </div>
+      <div class="form-card">
+
+        <!-- Compact key status — no input needed from user -->
+        <div class="key-status-banner" id="keyBanner">
+          ⏳ Connecting to AI service...
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label"><span>🌱</span> Crop Type</label>
+            <select class="form-select" id="cropType">
+              <option value="">Select crop...</option>
+              <option value="Banana / Pisang">Banana / Pisang</option>
+              <option value="Chili / Cili">Chili / Cili</option>
+              <option value="Tomato">Tomato</option>
+              <option value="Cabbage / Kubis">Cabbage / Kubis</option>
+              <option value="Durian">Durian</option>
+              <option value="Spinach / Bayam">Spinach / Bayam</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label"><span>📦</span> Quantity (kg)</label>
+            <input type="number" class="form-input" id="quantity" placeholder="e.g. 500" min="10" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label"><span>⏰</span> Harvest Timing</label>
+            <select class="form-select" id="harvestTiming">
+              <option value="">Select timing...</option>
+              <option value="Within 1 week">Within 1 week</option>
+              <option value="1–2 weeks from now">1–2 weeks from now</option>
+              <option value="2–4 weeks from now">2–4 weeks from now</option>
+              <option value="Already harvested">Already harvested</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label"><span>📍</span> Your State</label>
+            <select class="form-select" id="farmState">
+              <option value="">Select state...</option>
+              <option value="Perlis">Perlis</option>
+              <option value="Kedah">Kedah</option>
+              <option value="Pulau Pinang">Pulau Pinang</option>
+              <option value="Perak">Perak</option>
+              <option value="Kelantan">Kelantan</option>
+              <option value="Terengganu">Terengganu</option>
+              <option value="Pahang">Pahang</option>
+              <option value="Selangor">Selangor</option>
+              <option value="Kuala Lumpur">Kuala Lumpur</option>
+              <option value="Negeri Sembilan">Negeri Sembilan</option>
+              <option value="Melaka">Melaka</option>
+              <option value="Johor">Johor</option>
+              <option value="Sarawak">Sarawak</option>
+              <option value="Sabah">Sabah</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label"><span>🚛</span> Transport Available?</label>
+          <select class="form-select" id="transport">
+            <option value="own lorry">Yes — I have my own lorry</option>
+            <option value="hired truck">Yes — I can hire a truck</option>
+            <option value="motorbike only">Motorbike only (small loads)</option>
+            <option value="no transport">No transport — buyer must collect</option>
+          </select>
+        </div>
+
+        <button class="btn-primary" onclick="analyzeMarket()" id="analyzeBtn">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+          Analyze with Gemini AI
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3 — MAP + ANALYSIS -->
+  <div class="page" id="page3">
+    <div class="analysis-layout">
+      <div class="summary-bar">
+        <div class="summary-card">
+          <div class="sc-label">Best Selling Region</div>
+          <div class="sc-value" id="bestRegion">—</div>
+          <div class="sc-badge" id="bestRegionBadge">🏆 AI Pick</div>
+        </div>
+        <div class="summary-card">
+          <div class="sc-label">Expected Market Price</div>
+          <div class="sc-value" id="bestPrice">—</div>
+          <div class="sc-sub" id="priceDiff">vs your local estimate</div>
+        </div>
+        <div class="summary-card">
+          <div class="sc-label">Estimated Profit Gain</div>
+          <div class="sc-value" id="profitGain" style="color:var(--green)">—</div>
+          <div class="sc-badge" id="profitBadge">↑ Calculating...</div>
+        </div>
+      </div>
+
+      <div class="main-grid">
+        <div class="map-container">
+          <div class="map-header">
+            <h3>🗺️ Regional Demand Heat Map — Malaysia</h3>
+            <div class="map-legend">
+              <div class="leg-item">
+                <div class="leg-dot high"></div>High
+              </div>
+              <div class="leg-item">
+                <div class="leg-dot med"></div>Normal
+              </div>
+              <div class="leg-item">
+                <div class="leg-dot low"></div>Low
+              </div>
+            </div>
+          </div>
+          <div class="malaysia-map" id="malaysiaMapBox">
+            <div id="gmap" style="width:100%;height:100%;"></div>
+          </div>
+        </div>
+
+        <!-- Right panel -->
+        <div class="rec-box">
+          <div class="rec-card">
+            <div class="rec-header">
+              <svg viewBox="0 0 24 24">
+                <path d="M9 11l3 3L22 4" />
+                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+              </svg>
+              <h3>Gemini AI Recommendation</h3>
+            </div>
+            <div class="rec-body">
+              <div class="rec-action">
+                <div class="action-text" id="aiActionText">Loading...</div>
+                <div class="action-sub" id="aiActionSub">Gemini is generating your recommendation</div>
+              </div>
+              <div class="rec-profit">
+                <div>
+                  <div class="label">Expected Profit Gain</div>
+                  <div class="amount" id="aiProfitAmt">—</div>
+                </div>
+                <div style="font-size:2rem">💰</div>
+              </div>
+              <div class="rec-divider"></div>
+              <div class="rec-reason">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                  <strong style="color:var(--ink);font-size:0.82rem">AI Analysis</strong>
+                  <span class="ai-badge">✦ Gemini</span>
+                </div>
+                <div class="gemini-analysis" id="aiReasonText">Generating analysis...</div>
+              </div>
+              <div class="reason-chips" id="aiChips"></div>
+            </div>
+          </div>
+
+          <div class="timing-card">
+            <div class="timing-label">Best Days to Sell</div>
+            <div class="timing-bar" id="timingBar">
+              <div class="t-day">Mon</div>
+              <div class="t-day">Tue</div>
+              <div class="t-day">Wed</div>
+              <div class="t-day">Thu</div>
+              <div class="t-day">Fri</div>
+              <div class="t-day">Sat</div>
+              <div class="t-day">Sun</div>
+            </div>
+            <div style="font-size:0.72rem;color:var(--ink-light);margin-top:8px">🟢 Best &nbsp;🟡 Good &nbsp;⬜ Avoid
+            </div>
+          </div>
+
+          <button class="next-btn" onclick="goTo(4)">
+            <svg viewBox="0 0 24 24">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+            See Full Results & Impact
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 4 — RESULT -->
+  <div class="page" id="page4">
+    <div class="result-layout">
+      <div class="profit-hero">
+        <div class="profit-deco"></div>
+        <div class="profit-label">Your AI-Optimized Profit Gain</div>
+        <div class="profit-number" id="bigProfit">—</div>
+        <div class="profit-period" id="profitPeriodText">Calculating...</div>
+      </div>
+
+      <div class="compare-section">
+        <h2 class="compare-title">Before vs. After AgroSignal</h2>
+        <div class="compare-grid">
+          <div class="compare-card before">
+            <div class="cc-tag">❌ Without AgroSignal</div>
+            <div class="cc-title">Selling Locally</div>
+            <div id="beforePoints"></div>
+            <div class="cc-price" id="beforePrice">—</div>
+          </div>
+          <div class="compare-card after">
+            <div class="cc-tag">✓ With AgroSignal</div>
+            <div class="cc-title">Optimized Selling</div>
+            <div id="afterPoints"></div>
+            <div class="cc-price" id="afterPrice">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-summary">
+        <div class="ms-header">
+          <h3 id="routeTitle">🗺️ Recommended Route</h3>
+        </div>
+        <div class="ms-body">
+          <div class="route-visual">
+            <div class="route-node">
+              <div class="route-icon farm" id="routeCropIcon">🌱</div>
+              <div class="route-name">Your Farm</div>
+              <div style="font-size:0.7rem;color:var(--ink-light)" id="routeFrom">—</div>
+            </div>
+            <div style="flex:1;position:relative">
+              <div class="route-line">
+                <div class="route-distance" id="routeDistText">Calculating...</div>
+              </div>
+            </div>
+            <div class="route-node">
+              <div class="route-icon market">🏪</div>
+              <div class="route-name" id="routeToName">Best Market</div>
+              <div style="font-size:0.7rem;color:rgba(45,122,58,0.8)" id="routeTo">—</div>
+            </div>
+          </div>
+          <div class="route-stats">
+            <div class="rs-item">
+              <div class="rs-label">Distance</div>
+              <div class="rs-value" id="routeDist">—</div>
+            </div>
+            <div class="rs-item">
+              <div class="rs-label">Travel Time</div>
+              <div class="rs-value" id="routeTime">—</div>
+            </div>
+            <div class="rs-item">
+              <div class="rs-label">Transport Cost Est.</div>
+              <div class="rs-value" id="routeCost">—</div>
+            </div>
+            <div class="rs-item">
+              <div class="rs-label">Net Profit After Transport</div>
+              <div class="rs-value" style="color:var(--green)" id="routeNet">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ai-full-analysis">
+        <div class="ai-analysis-header">
+          <h3 style="color:white">✦ Full Gemini AI Market Analysis</h3>
+        </div>
+        <div class="ai-analysis-body" id="fullAnalysisBody">Loading full analysis...</div>
+      </div>
+
+      <div class="impact-section">
+        <div class="impact-icon">🌍</div>
+        <div class="impact-label">National Farming Impact</div>
+        <div class="impact-number">RM 8.5 Billion</div>
+        <div class="impact-text">If AgroSignal is adopted by 10,000 farmers across Malaysia — each gaining an average of
+          RM 850 per harvest cycle — the estimated total improved income efficiency is <strong>RM 8.5 Billion
+            annually</strong>.</div>
+        <div class="impact-chips">
+          <div class="impact-chip">10,000 Farmers</div>
+          <div class="impact-chip">↑ AI-Optimized</div>
+          <div class="impact-chip">13 Regions</div>
+          <div class="impact-chip">Gemini Powered</div>
+        </div>
+        <button class="export-btn" onclick="exportReport()">⬇ Download Selling Plan</button>
+        <button class="restart-btn" onclick="location.reload()">← Start New Analysis</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ══════════════════════════════════════════
+    // STATE — key is loaded from server, not user input
+    // ══════════════════════════════════════════
+    let aiResult = null;
+    let geminiApiKey = '';
+
+    async function loadGoogleMaps() {
+      const res = await fetch('/api/maps-key');
+      const data = await res.json();
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&callback=initGoogleMap`;
+      script.async = true;
+      document.head.appendChild(script);
+    }
+
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      loadGoogleMaps();
+      // Fetch API key securely from the server
+      try {
+        const res = await fetch('/api/key');
+        const data = await res.json();
+        if (data.key) {
+          geminiApiKey = data.key;
+          const banner = document.getElementById('keyBanner');
+          banner.textContent = '✓ AI service connected — ready to analyze';
+          banner.className = 'key-status-banner ok';
+        } else {
+          throw new Error(data.error || 'Key missing');
+        }
+      } catch (e) {
+        const banner = document.getElementById('keyBanner');
+        banner.textContent = '⚠ Could not connect to AI service. Check your .env file and restart the server.';
+        banner.className = 'key-status-banner err';
+      }
+      setupMapHover();
+    });
+
+    function goTo(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-step').forEach((s, i) => s.classList.toggle('active', i + 1 === page));
+      document.getElementById('page' + page).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ══════════════════════════════════════════
+    // GEMINI API CALL
+    // ══════════════════════════════════════════
+    async function callGemini(prompt) {
+      if (!geminiApiKey) throw new Error('AI service not connected. Please check your .env file.');
+      const resp = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.7, maxOutputTokens: 4000 }
+          })
+        }
+      );
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error?.message || 'Gemini API error');
+      }
+      const data = await resp.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    }
+
+    // ══════════════════════════════════════════
+    // ANALYZE MARKET
+    // ══════════════════════════════════════════
+    async function analyzeMarket() {
+      const crop = document.getElementById('cropType').value;
+      const qty = document.getElementById('quantity').value;
+      const timing = document.getElementById('harvestTiming').value;
+      const state = document.getElementById('farmState').value;
+      const transport = document.getElementById('transport').value;
+
+      if (!crop || !qty || !timing || !state) {
+        alert('Please fill in all fields before analyzing.'); return;
+      }
+      if (!geminiApiKey) {
+        alert('AI service not connected. Please check your .env file and restart the server.'); return;
+      }
+
+      const btn = document.getElementById('analyzeBtn');
+      btn.disabled = true; btn.textContent = 'Analyzing...';
+      showLoading();
+      animateLoadingSteps();
+
+      try {
+        // ── STEP 1: Call your FastAPI model for real computed numbers ──
+        const modelRes = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            crop,
+            quantity: parseFloat(qty),
+            timing,
+            state,
+            transport
+          })
+        });
+
+        if (!modelRes.ok) {
+          const err = await modelRes.json();
+          throw new Error(err.detail || 'Model API error');
+        }
+
+        const modelData = await modelRes.json();
+        // modelData contains: bestRegion, estimatedMarketPrice,
+        // transportCostRM, netProfitAfterTransport, distanceKm, finalScore
+
+        // Derive values the model doesn't return
+        const estimatedLocalPrice = parseFloat((modelData.estimatedMarketPrice * 0.75).toFixed(2));
+        const totalProfitGain = parseFloat(((modelData.estimatedMarketPrice - estimatedLocalPrice) * parseFloat(qty)).toFixed(2));
+        const totalRevenue = parseFloat((modelData.estimatedMarketPrice * parseFloat(qty)).toFixed(2));
+        const localRevenue = parseFloat((estimatedLocalPrice * parseFloat(qty)).toFixed(2));
+        const travelHours = parseFloat((modelData.distanceKm / 80).toFixed(1)); // ~80 km/h avg
+
+        // ── STEP 2: Feed REAL numbers into Gemini — only ask for narrative ──
+        const prompt = `You are AgroSignal, an AI market advisor for Malaysian farmers.
+The following data was computed from REAL FAMA price records — do NOT change any numbers.
+
+REAL DATA (from model):
+- Crop: ${crop}
+- Quantity: ${qty} kg
+- Farmer's State: ${state}
+- Harvest Timing: ${timing}
+- Transport: ${transport}
+- Best Region to Sell: ${modelData.bestRegion}
+- Market Price (FAMA): RM ${modelData.estimatedMarketPrice}/kg
+- Local Price (estimated): RM ${estimatedLocalPrice}/kg
+- Total Profit Gain: RM ${totalProfitGain}
+- Transport Cost: RM ${modelData.transportCostRM}
+- Net Profit After Transport: RM ${modelData.netProfitAfterTransport}
+- Distance: ${modelData.distanceKm} km
+- Travel Time: ~${travelHours} hrs
+
+Your job is to return ONLY a valid JSON object (no markdown, no text outside JSON) with narrative and demand context:
+
+{
+  "bestMarketCity": "specific city/town in ${modelData.bestRegion}",
+  "demandLevel": "High",
+  "bestDays": ["Wed", "Thu", "Fri"],
+  "goodDays": ["Mon", "Tue"],
+  "actionText": "1 sentence telling farmer exactly what to do",
+  "actionSub": "1 sentence on why the timing is right",
+  "shortReason": "2-3 sentences explaining why ${modelData.bestRegion} is best for ${crop} right now based on supply/demand.",
+  "reasonChips": ["📈 High demand", "📉 Low supply", "🏭 Active buyers", "🚛 Good logistics"],
+  "regionDemandMap": {
+    "Perlis": "low", "Kedah": "med", "Pulau Pinang": "med", "Perak": "med",
+    "Kelantan": "low", "Terengganu": "low", "Pahang": "med", "Selangor": "med",
+    "Kuala Lumpur": "low", "Negeri Sembilan": "med", "Melaka": "med",
+    "Johor": "high", "Sarawak": "med", "Sabah": "low"
+  },
+  "beforePoints": [
+    "Sells to nearest local market without comparing prices",
+    "Receives only RM ${estimatedLocalPrice}/kg at local market",
+    "Misses seasonal demand peaks in higher-value regions",
+    "No visibility into supply/demand across other states"
+  ],
+  "afterPoints": [
+    "Directed to ${modelData.bestRegion} — highest demand for ${crop}",
+    "Earns RM ${modelData.estimatedMarketPrice}/kg vs RM ${estimatedLocalPrice}/kg locally",
+    "Timed for peak market window based on FAMA data",
+    "Net gain of RM ${modelData.netProfitAfterTransport} after transport costs"
+  ],
+  "fullAnalysis": "3 sentences explaining the market opportunity for ${crop} in ${modelData.bestRegion}, referencing real supply-demand dynamics, seasonal factors, and why this beats selling in ${state}."
+}
+
+Set regionDemandMap["${modelData.bestRegion}"] = "high".
+Return ONLY the JSON object.`;
+
+        const raw = await callGemini(prompt);
+        const jsonMatch = raw.replace(/```json|```/g, '').trim().match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('Could not parse AI narrative response. Please try again.');
+        const narrative = JSON.parse(jsonMatch[0]);
+
+        // ── STEP 3: Merge model numbers + Gemini narrative ──
+        aiResult = {
+          // Real numbers from your model
+          bestRegion: modelData.bestRegion,
+          estimatedMarketPrice: modelData.estimatedMarketPrice,
+          estimatedLocalPrice,
+          totalProfitGain,
+          totalRevenue,
+          localRevenue,
+          transportCostRM: modelData.transportCostRM,
+          netProfitAfterTransport: modelData.netProfitAfterTransport,
+          distanceKm: modelData.distanceKm,
+          travelHours,
+          // Narrative from Gemini
+          ...narrative
+        };
+
+        await new Promise(r => setTimeout(r, 600));
+        hideLoading();
+        populatePage3(aiResult);
+        populatePage4(aiResult);
+        goTo(3);
+
+      } catch (e) {
+        hideLoading();
+        btn.disabled = false;
+        btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg> Analyze with Gemini AI';
+        alert('Error: ' + e.message);
+      }
+    }
+
+    // ══════════════════════════════════════════
+    // LOADING ANIMATION
+    // ══════════════════════════════════════════
+    function showLoading() {
+      document.getElementById('loadingOverlay').classList.add('show');
+      ['step1', 'step2', 'step3', 'step4'].forEach(id => document.getElementById(id).className = 'loading-step');
+    }
+    function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
+    function animateLoadingSteps() {
+      const steps = ['step1', 'step2', 'step3', 'step4'];
+      steps.forEach((id, i) => {
+        setTimeout(() => {
+          if (i > 0) document.getElementById(steps[i - 1]).className = 'loading-step done';
+          document.getElementById(id).className = 'loading-step active';
+        }, i * 600);
+      });
+      setTimeout(() => { document.getElementById('step4').className = 'loading-step done'; }, steps.length * 600);
+    }
+
+    function exportReport() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+      const crop = document.getElementById('cropType').value;
+      const qty = document.getElementById('quantity').value;
+      const state = document.getElementById('farmState').value;
+      const r = aiResult;
+      const today = new Date().toLocaleDateString('en-MY', { dateStyle: 'full' });
+      const pageW = 210;
+      const pageH = 297;
+      const margin = 18;
+      const contentW = pageW - margin * 2;
+      let y = 0;
+
+      // ── helpers ──────────────────────────────────────
+      function hex(h) {
+        const x = parseInt(h.replace('#', ''), 16);
+        return [(x >> 16) & 255, (x >> 8) & 255, x & 255];
+      }
+      function setFont(style = 'normal', size = 10, color = '#1a2218') {
+        doc.setFont('helvetica', style);
+        doc.setFontSize(size);
+        doc.setTextColor(...hex(color));
+      }
+      function drawRect(x, iy, w, h, fillHex, radiusAmt = 3) {
+        doc.setFillColor(...hex(fillHex));
+        doc.roundedRect(x, iy, w, h, radiusAmt, radiusAmt, 'F');
+      }
+      function labelValue(label, value, ix, iy, valueColor = '#1a2218') {
+        setFont('bold', 8, '#6b7f68');
+        doc.text(label.toUpperCase(), ix, iy);
+        setFont('bold', 10, valueColor);
+        doc.text(value, ix, iy + 5);
+      }
+      function sectionTitle(title, iy) {
+        setFont('bold', 9, '#2d7a3a');
+        doc.text(title.toUpperCase(), margin, iy);
+        doc.setDrawColor(...hex('#b8ddbf'));
+        doc.setLineWidth(0.4);
+        doc.line(margin, iy + 2, pageW - margin, iy + 2);
+        return iy + 8;
+      }
+      // Add this helper function
+      function stripEmoji(text) {
+        return text.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}\u200d\uFE0F]/gu, '').trim();
+      }
+      function chip(text, ix, iy, bgHex = '#e8f5eb', textHex = '#2d7a3a') {
+        setFont('bold', 7.5, textHex);
+        const tw = doc.getTextWidth(text);
+        drawRect(ix, iy - 4, tw + 8, 6, bgHex, 3);
+        doc.setTextColor(...hex(textHex));
+        doc.text(text, ix + 4, iy);
+      }
+      function wrapText(text, ix, iy, maxW, lineH = 5.5) {
+        setFont('normal', 9, '#3d4f3a');
+        const lines = doc.splitTextToSize(text, maxW);
+        doc.text(lines, ix, iy);
+        return iy + lines.length * lineH;
+      }
+
+      // ══════════════════════════════════════════
+      // HEADER BAND
+      // ══════════════════════════════════════════
+      drawRect(0, 0, pageW, 38, '#2d7a3a', 0);
+      // logo box
+      drawRect(margin, 8, 12, 12, '#4caf62', 2);
+      setFont('bold', 9, '#ffffff');
+      doc.text('A', margin + 3.8, 16.5);
+      // title
+      setFont('bold', 18, '#ffffff');
+      doc.text('AgroSignal', margin + 16, 16);
+      setFont('normal', 8.5, '#c8e6c8');
+      doc.setTextColor(200, 230, 200);
+      doc.text('Selling Plan Report  •  Powered by Gemini AI', margin + 16, 22);
+      // date top right
+      setFont('normal', 8, '#ffffff');
+      doc.setTextColor(180, 220, 180);
+      doc.text(today, pageW - margin, 14, { align: 'right' });
+      y = 46;
+
+      // ══════════════════════════════════════════
+      // PROFIT HERO CARD
+      // ══════════════════════════════════════════
+      drawRect(margin, y, contentW, 28, '#f0fdf4', 4);
+      doc.setDrawColor(...hex('#b8ddbf'));
+      doc.setLineWidth(0.5);
+      doc.roundedRect(margin, y, contentW, 28, 4, 4, 'S');
+      // green left bar
+      drawRect(margin, y, 3, 28, '#2d7a3a', 0);
+
+      setFont('bold', 8, '#6b7f68');
+      doc.text('ESTIMATED PROFIT GAIN', margin + 8, y + 8);
+      setFont('bold', 22, '#2d7a3a');
+      doc.text(`+RM ${r.totalProfitGain.toLocaleString()}`, margin + 8, y + 20);
+      setFont('normal', 8.5, '#6b7f68');
+      doc.text(`Selling ${qty}kg of ${crop} → ${r.bestRegion}`, margin + 8, y + 26);
+
+      // right side mini stats
+      const col2 = margin + contentW * 0.58;
+      labelValue('Market Price', `RM ${r.estimatedMarketPrice.toFixed(2)}/kg`, col2, y + 10, '#2d7a3a');
+      const col3 = margin + contentW * 0.80;
+      labelValue('Net After Transport', `RM ${r.netProfitAfterTransport.toLocaleString()}`, col3, y + 10, '#2d7a3a');
+      y += 36;
+
+      // ══════════════════════════════════════════
+      // CROP DETAILS + RECOMMENDATION — 2 cols
+      // ══════════════════════════════════════════
+      const colW = (contentW - 6) / 2;
+
+      // Left card
+      drawRect(margin, y, colW, 48, '#f7faf7', 3);
+      doc.setDrawColor(...hex('#ddeedd'));
+      doc.roundedRect(margin, y, colW, 48, 3, 3, 'S');
+      let ly = sectionTitle('CROP DETAILS', y + 8);
+      ly += 2;
+      labelValue('Crop Type', crop, margin + 4, ly);
+      labelValue('Quantity', `${qty} kg`, margin + 4 + colW / 2, ly);
+      ly += 14;
+      labelValue('Your State', state, margin + 4, ly);
+      labelValue('Harvest Timing', document.getElementById('harvestTiming').value, margin + 4 + colW / 2, ly);
+
+      // Right card
+      const rx = margin + colW + 6;
+      drawRect(rx, y, colW, 48, '#f7faf7', 3);
+      doc.setDrawColor(...hex('#ddeedd'));
+      doc.roundedRect(rx, y, colW, 48, 3, 3, 'S');
+      let ry;
+      // fix — rewrite properly
+      doc.setFillColor(...hex('#f7faf7'));
+      setFont('bold', 9, '#2d7a3a');
+      doc.text('AI RECOMMENDATION', rx + 4, y + 8);
+      doc.setDrawColor(...hex('#b8ddbf'));
+      doc.line(rx + 4, y + 10, rx + colW - 4, y + 10);
+      ry = y + 18;
+      labelValue('Sell In', `${r.bestMarketCity}`, rx + 4, ry, '#2d7a3a');
+      labelValue('State', r.bestRegion, rx + 4 + colW / 2, ry, '#2d7a3a');
+      ry += 14;
+      labelValue('Best Days', (r.bestDays || []).join(', '), rx + 4, ry);
+      labelValue('Distance', `${r.distanceKm} km`, rx + 4 + colW / 2, ry);
+      y += 56;
+
+      // ══════════════════════════════════════════
+      // ACTION PLAN CARD
+      // ══════════════════════════════════════════
+      drawRect(margin, y, contentW, 26, '#2d7a3a', 4);
+      setFont('bold', 9, '#ffffff');
+      doc.text('ACTION PLAN', margin + 6, y + 8);
+      setFont('normal', 9, '#ffffff');
+      doc.setTextColor(210, 240, 215);
+      const actionLines = doc.splitTextToSize(r.actionText, contentW - 12);
+      doc.text(actionLines, margin + 6, y + 15);
+      setFont('normal', 8, '#ffffff');
+      doc.setTextColor(180, 220, 185);
+      doc.text(r.actionSub, margin + 6, y + 22);
+      y += 34;
+
+      // ══════════════════════════════════════════
+      // PRICE COMPARISON TABLE
+      // ══════════════════════════════════════════
+      y = sectionTitle('PRICE COMPARISON', y);
+
+      // Table header
+      drawRect(margin, y, contentW, 8, '#2d7a3a', 2);
+      setFont('bold', 8.5, '#ffffff');
+      doc.text('', margin, y); // spacer
+      doc.setTextColor(255, 255, 255);
+      const cols = [margin + 4, margin + 55, margin + 95, margin + 135];
+      const headers = ['', 'Price/kg', 'Total Revenue', 'Profit Gain'];
+      headers.forEach((h, i) => doc.text(h, cols[i], y + 5.5));
+      y += 8;
+
+      // Row 1 — before
+      drawRect(margin, y, contentW, 9, '#fff8f8', 0);
+      doc.setDrawColor(...hex('#ffd7d7'));
+      doc.rect(margin, y, contentW, 9, 'S');
+      setFont('normal', 9, '#1a2218');
+      doc.text('Without AgroSignal', cols[0], y + 6);
+      doc.text(`RM ${r.estimatedLocalPrice.toFixed(2)}`, cols[1], y + 6);
+      doc.text(`RM ${r.localRevenue.toLocaleString()}`, cols[2], y + 6);
+      setFont('bold', 9, '#e05c5c');
+      doc.text('Baseline', cols[3], y + 6);
+      y += 9;
+
+      // Row 2 — after
+      drawRect(margin, y, contentW, 9, '#f0fdf4', 0);
+      doc.setDrawColor(...hex('#b8ddbf'));
+      doc.rect(margin, y, contentW, 9, 'S');
+      setFont('bold', 9, '#1a2218');
+      doc.text('With AgroSignal [AI]', cols[0], y + 6);
+      doc.text(`RM ${r.estimatedMarketPrice.toFixed(2)}`, cols[1], y + 6);
+      doc.text(`RM ${r.totalRevenue.toLocaleString()}`, cols[2], y + 6);
+      setFont('bold', 9, '#2d7a3a');
+      doc.text(`+RM ${r.totalProfitGain.toLocaleString()}`, cols[3], y + 6);
+      y += 16;
+
+      // ══════════════════════════════════════════
+      // ROUTE & LOGISTICS (2-row layout to avoid overflow)
+      // ══════════════════════════════════════════
+      y = sectionTitle('ROUTE & LOGISTICS', y);
+      drawRect(margin, y, contentW, 32, '#f7faf7', 3);
+      doc.setDrawColor(...hex('#ddeedd'));
+      doc.roundedRect(margin, y, contentW, 32, 3, 3, 'S');
+
+      // Row 1: From and To
+      const halfW = contentW / 2;
+      labelValue('From', state, margin + 4, y + 7);
+      // Truncate long "To" text to fit
+      const toText = `${r.bestMarketCity}, ${r.bestRegion}`;
+      setFont('bold', 10, '#1a2218');
+      const maxToW = halfW - 12;
+      const toLines = doc.splitTextToSize(toText, maxToW);
+      setFont('bold', 8, '#6b7f68');
+      doc.text('TO', margin + 4 + halfW, y + 7);
+      setFont('bold', 10, '#1a2218');
+      doc.text(toLines[0], margin + 4 + halfW, y + 12);
+
+      // Row 2: Travel Time and Transport Cost
+      labelValue('Travel Time', `~${r.travelHours} hrs`, margin + 4, y + 21);
+      labelValue('Transport Cost', `RM ${Number(r.transportCostRM).toLocaleString()}`, margin + 4 + halfW, y + 21, '#1a2218');
+      y += 40;
+
+      // ══════════════════════════════════════════
+      // REASON CHIPS
+      // ══════════════════════════════════════════
+      setFont('bold', 8, '#6b7f68');
+      doc.text('WHY THIS MARKET', margin, y);
+      y += 6;
+      let cx = margin;
+      (r.reasonChips || []).forEach(ch => {
+        const clean = stripEmoji(ch);
+        setFont('bold', 7.5, '#2d7a3a');
+        const tw = doc.getTextWidth(clean) + 8;
+        if (cx + tw > pageW - margin) { cx = margin; y += 8; }
+        chip(clean, cx, y);
+        cx += tw + 4;
+      });
+      y += 10;
+
+      // ══════════════════════════════════════════
+      // AI FULL ANALYSIS (with page-break support)
+      // ══════════════════════════════════════════
+      y = sectionTitle('GEMINI AI MARKET ANALYSIS', y);
+      setFont('normal', 9, '#3d4f3a');
+      const analysisLines = doc.splitTextToSize(r.fullAnalysis || '', contentW);
+      const lineH = 5.5;
+      const footerH = 18;
+      const maxY = pageH - footerH - 10;
+
+      analysisLines.forEach(line => {
+        if (y + lineH > maxY) {
+          // draw footer on current page, then add new page
+          drawFooter(doc, pageW, pageH, margin, today);
+          doc.addPage();
+          y = 20;
+          setFont('normal', 9, '#3d4f3a');
+        }
+        doc.text(line, margin, y);
+        y += lineH;
+      });
+      y += 8;
+
+      // ══════════════════════════════════════════
+      // FOOTER (on last page)
+      // ══════════════════════════════════════════
+      drawFooter(doc, pageW, pageH, margin, today);
+
+      // ══════════════════════════════════════════
+      // SAVE
+      // ══════════════════════════════════════════
+      doc.save(`AgroSignal_${crop.replace(/[\s/]/g, '_')}_${r.bestRegion}.pdf`);
+    }
+
+    function drawFooter(doc, pageW, pageH, margin, today) {
+      const { jsPDF } = window.jspdf;
+      function hex(h) {
+        const x = parseInt(h.replace('#', ''), 16);
+        return [(x >> 16) & 255, (x >> 8) & 255, x & 255];
+      }
+      const footerY = pageH - 14;
+      doc.setFillColor(...hex('#2d7a3a'));
+      doc.roundedRect(0, footerY - 4, pageW, 18, 0, 0, 'F');
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(200, 230, 200);
+      doc.text('AgroSignal  •  Powered by Gemini AI  •  agrosignal.my', pageW / 2, footerY + 4, { align: 'center' });
+      doc.setTextColor(160, 210, 170);
+      doc.text(`Generated: ${today}`, pageW - margin, footerY + 4, { align: 'right' });
+    }
+
+
+    // ══════════════════════════════════════════
+    // GOOGLE MAPS
+    // ══════════════════════════════════════════
+    function initGoogleMap() {
+      const map = new google.maps.Map(document.getElementById('gmap'), {
+        center: { lat: 4.2105, lng: 108.9758 }, zoom: 6,
+        mapTypeId: 'roadmap', disableDefaultUI: true, zoomControl: true,
+        styles: cleanMapStyle()
+      });
+      window.gmap = map;
+
+      const heroMap = new google.maps.Map(document.getElementById('heroMap'), {
+        center: { lat: 4.5, lng: 109.5 }, zoom: 5,
+        mapTypeId: 'roadmap', disableDefaultUI: false,
+        gestureHandling: 'greedy', zoomControl: true,
+        scrollwheel: true, draggable: true, styles: cleanMapStyle()
+      });
+
+      const regions = [
+        { lat: 1.9344, lng: 103.3587, color: '#4CAF50', label: 'Johor', demand: 'high', price: '+RM0.80/kg' },
+        { lat: 3.0738, lng: 101.5183, color: '#FFB300', label: 'Selangor', demand: 'med', price: '+RM0.30/kg' },
+        { lat: 4.5921, lng: 101.0901, color: '#E53935', label: 'Perak', demand: 'low', price: 'Oversupply' },
+      ];
+
+      regions.forEach(r => {
+        new google.maps.Circle({
+          map: heroMap, center: { lat: r.lat, lng: r.lng }, radius: 60000,
+          fillColor: r.color, fillOpacity: 0.22, strokeColor: r.color, strokeOpacity: 0.6, strokeWeight: 1.5
+        });
+
+        const marker = new google.maps.Marker({
+          position: { lat: r.lat, lng: r.lng }, map: heroMap, title: r.label,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE, scale: r.demand === 'high' ? 10 : 7,
+            fillColor: r.color, fillOpacity: 1, strokeColor: 'white', strokeWeight: 2
+          }
+        });
+
+        const infoWindow = new google.maps.InfoWindow({
+          content: `<div style="font-family:'DM Sans',sans-serif;padding:10px 14px;min-width:160px">
+        <div style="font-weight:800;font-size:13px;color:#1a2218;margin-bottom:6px">${r.label}</div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#6b7f68;margin-bottom:3px">
+          <span>Demand</span><span style="font-weight:700;color:${r.color}">${r.demand === 'high' ? 'High ↑' : r.demand === 'med' ? 'Medium →' : 'Low ↓'}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#6b7f68">
+          <span>Price signal</span><span style="font-weight:700;color:#1a2218">${r.price}</span>
+        </div>
+        <div style="margin-top:8px;padding:5px 10px;background:${r.demand === 'high' ? '#e8f5eb' : r.demand === 'med' ? '#fff8e1' : '#ffebee'};border-radius:20px;font-size:11px;font-weight:700;color:${r.color};text-align:center">
+          ${r.demand === 'high' ? '✓ Recommended' : r.demand === 'med' ? '~ Acceptable' : '✗ Avoid'}
+        </div>
+      </div>`
+        });
+
+        marker.addListener('mouseover', () => { infoWindow.open(heroMap, marker); marker.setIcon({ path: google.maps.SymbolPath.CIRCLE, scale: r.demand === 'high' ? 14 : 10, fillColor: r.color, fillOpacity: 1, strokeColor: 'white', strokeWeight: 3 }); });
+        marker.addListener('mouseout', () => { infoWindow.close(); marker.setIcon({ path: google.maps.SymbolPath.CIRCLE, scale: r.demand === 'high' ? 10 : 7, fillColor: r.color, fillOpacity: 1, strokeColor: 'white', strokeWeight: 2 }); });
+      });
+
+    }
+
+    function cleanMapStyle() {
+      return [
+        { elementType: 'geometry', stylers: [{ color: '#f0f7f0' }] },
+        { elementType: 'labels.text.fill', stylers: [{ color: '#6b7f68' }] },
+        { elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }] },
+        { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#c9e8d1' }] },
+        { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ddeedd' }] },
+        { featureType: 'road', elementType: 'labels', stylers: [{ visibility: 'off' }] },
+        { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+        { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+        { featureType: 'administrative', elementType: 'geometry', stylers: [{ color: '#b8ddbf' }] },
+        { featureType: 'administrative', elementType: 'labels.text.fill', stylers: [{ color: '#3d4f3a' }] },
+        { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#e8f5eb' }] },
+      ];
+    }
+
+    // ══════════════════════════════════════════
+    // POPULATE PAGE 3
+    // ══════════════════════════════════════════
+    function populatePage3(r) {
+      document.getElementById('bestRegion').textContent = r.bestRegion;
+      document.getElementById('bestPrice').textContent = `RM ${r.estimatedMarketPrice.toFixed(2)}/kg`;
+      document.getElementById('priceDiff').textContent = `vs est. local RM ${r.estimatedLocalPrice.toFixed(2)}/kg`;
+      const gain = r.totalProfitGain;
+      document.getElementById('profitGain').textContent = `+RM ${gain.toLocaleString()}`;
+      const pct = Math.round(((r.estimatedMarketPrice - r.estimatedLocalPrice) / r.estimatedLocalPrice) * 100);
+      document.getElementById('profitBadge').textContent = `↑ +${pct}% increase`;
+      document.getElementById('aiActionText').textContent = r.actionText;
+      document.getElementById('aiActionSub').textContent = r.actionSub;
+      document.getElementById('aiProfitAmt').textContent = `+RM ${gain.toLocaleString()}`;
+      document.getElementById('aiReasonText').innerHTML = r.shortReason;
+      const chipsEl = document.getElementById('aiChips');
+      chipsEl.innerHTML = '';
+      (r.reasonChips || []).forEach(chip => { const s = document.createElement('span'); s.className = 'reason-chip'; s.textContent = chip; chipsEl.appendChild(s); });
+      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      const timingBar = document.getElementById('timingBar');
+      timingBar.innerHTML = '';
+      days.forEach(d => { const el = document.createElement('div'); el.className = 't-day'; if ((r.bestDays || []).includes(d)) el.classList.add('best'); else if ((r.goodDays || []).includes(d)) el.classList.add('good'); el.textContent = d; timingBar.appendChild(el); });
+      addMapMarkers(r.regionDemandMap, r.bestRegion);
+    }
+
+    function addMapMarkers(demandMap, bestRegion) {
+      const coords = {
+        'Johor': { lat: 1.9344, lng: 103.3587 }, 'Selangor': { lat: 3.0738, lng: 101.5183 },
+        'Kuala Lumpur': { lat: 3.1390, lng: 101.6869 }, 'Perak': { lat: 4.5921, lng: 101.0901 },
+        'Kedah': { lat: 6.1184, lng: 100.3685 }, 'Pulau Pinang': { lat: 5.4141, lng: 100.3288 },
+        'Kelantan': { lat: 6.1254, lng: 102.2381 }, 'Terengganu': { lat: 5.3117, lng: 103.1324 },
+        'Pahang': { lat: 3.8126, lng: 103.3256 }, 'Negeri Sembilan': { lat: 2.7258, lng: 101.9424 },
+        'Melaka': { lat: 2.1896, lng: 102.2501 }, 'Perlis': { lat: 6.4449, lng: 100.2048 },
+        'Sabah': { lat: 5.9788, lng: 116.0753 }, 'Sarawak': { lat: 1.5533, lng: 110.3592 }
+      };
+      const colors = { high: '#2d7a3a', med: '#f4a621', low: '#e05c5c' };
+
+      Object.entries(demandMap).forEach(([region, demand]) => {
+        if (!coords[region]) return;
+        const isBest = region === bestRegion;
+
+        const marker = new google.maps.Marker({
+          position: coords[region],
+          map: window.gmap,
+          title: region,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: isBest ? 16 : 10,
+            fillColor: colors[demand] || '#b8ddbf',
+            fillOpacity: 0.9,
+            strokeColor: isBest ? '#1a2218' : 'white',
+            strokeWeight: isBest ? 3 : 1.5
+          }
+        });
+
+        const iw = new google.maps.InfoWindow({
+          content: `
+        <div style="font-family:'DM Sans',sans-serif; padding:8px; min-width:120px;">
+          <strong style="color:var(--ink)">${region}</strong><br/>
+          <span style="font-size:0.75rem; color:var(--ink-light)">Demand: 
+            <span style="color:${colors[demand]}; font-weight:700">${demand.toUpperCase()}</span>
+          </span>
+          ${isBest ? '<div style="margin-top:5px; font-size:0.7rem; color:#2d7a3a; font-weight:700;">✓ AI Recommended Market</div>' : ''}
+        </div>`
+        });
+
+        // --- HOVER LOGIC ---
+        marker.addListener('mouseover', () => {
+          iw.open(window.gmap, marker);
+          // Optional: Slight scale up on hover
+          const icon = marker.getIcon();
+          icon.scale += 2;
+          marker.setIcon(icon);
+        });
+
+        marker.addListener('mouseout', () => {
+          iw.close();
+          // Reset scale
+          const icon = marker.getIcon();
+          icon.scale -= 2;
+          marker.setIcon(icon);
+        });
+      });
+    }
+
+
+    function setupMapHover() { /* SVG path tooltips — no SVG map in this version */ }
+
+    // ══════════════════════════════════════════
+    // POPULATE PAGE 4
+    // ══════════════════════════════════════════
+    function populatePage4(r) {
+      const crop = document.getElementById('cropType').value;
+      const qty = document.getElementById('quantity').value;
+      const state = document.getElementById('farmState').value;
+      document.getElementById('bigProfit').textContent = `+RM ${r.totalProfitGain.toLocaleString()}`;
+      document.getElementById('profitPeriodText').textContent = `Selling ${qty}kg of ${crop} in ${r.bestRegion} — ${r.actionText}`;
+      const beforeEl = document.getElementById('beforePoints');
+      beforeEl.innerHTML = '';
+      (r.beforePoints || []).forEach(pt => { beforeEl.innerHTML += `<div class="cc-item"><div class="cc-dot"></div><div class="cc-text">${pt}</div></div>`; });
+      document.getElementById('beforePrice').textContent = `RM ${r.estimatedLocalPrice.toFixed(2)}/kg → RM ${r.localRevenue.toLocaleString()} total`;
+      const afterEl = document.getElementById('afterPoints');
+      afterEl.innerHTML = '';
+      (r.afterPoints || []).forEach(pt => { afterEl.innerHTML += `<div class="cc-item"><div class="cc-dot"></div><div class="cc-text">${pt}</div></div>`; });
+      document.getElementById('afterPrice').textContent = `RM ${r.estimatedMarketPrice.toFixed(2)}/kg → RM ${r.totalRevenue.toLocaleString()} total`;
+      document.getElementById('routeTitle').textContent = `🗺️ Recommended Route — ${state} → ${r.bestMarketCity}`;
+      document.getElementById('routeFrom').textContent = state;
+      document.getElementById('routeToName').textContent = r.bestMarketCity;
+      document.getElementById('routeTo').textContent = r.bestRegion;
+      document.getElementById('routeDistText').textContent = `~${r.distanceKm} km · ${r.travelHours} hrs`;
+      document.getElementById('routeDist').textContent = `${r.distanceKm} km`;
+      document.getElementById('routeTime').textContent = `~${r.travelHours} hrs`;
+      document.getElementById('routeCost').textContent = `RM ~${r.transportCostRM}`;
+      document.getElementById('routeNet').textContent = `+RM ${r.netProfitAfterTransport.toLocaleString()}`;
+      const cropIcons = { 'Corn / Jagung': '🌽', 'Paddy / Rice': '🌾', 'Banana / Pisang': '🍌', 'Chili / Cili': '🌶️', 'Tomato': '🍅', 'Durian': '🌵', 'Pineapple / Nanas': '🍍', 'Cabbage / Kubis': '🥬', 'Palm Oil / Sawit': '🌴', 'Rubber / Getah': '🌿' };
+      document.getElementById('routeCropIcon').textContent = cropIcons[crop] || '🌱';
+      document.getElementById('fullAnalysisBody').innerHTML = `<p>${(r.fullAnalysis || 'No detailed analysis available.').replace(/\n/g, '</p><p style="margin-top:10px">')}</p>`;
+    }
+  </script>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- AGROSIGNAL AI AGENT CHAT WIDGET           -->
+  <!-- ══════════════════════════════════════════ -->
+  <style>
+    .agent-fab {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2d7a3a, #4caf62);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(45, 122, 58, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .agent-fab:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(45, 122, 58, 0.55);
+    }
+
+    .agent-fab svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
+    }
+
+    .agent-fab .fab-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #f4a621;
+      border: 2px solid white;
+      animation: pulse 2s infinite;
+    }
+
+    .agent-panel {
+      position: fixed;
+      bottom: 100px;
+      right: 28px;
+      z-index: 9998;
+      width: 380px;
+      max-height: 520px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 48px rgba(45, 122, 58, 0.18);
+      border: 1px solid var(--green-mid);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .agent-panel.open {
+      display: flex;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .agent-header {
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #2d7a3a, #3a9e4a);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .agent-header-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #7dff8a;
+      animation: pulse 2s infinite;
+    }
+
+    .agent-header-title {
+      color: white;
+      font-weight: 700;
+      font-size: 0.95rem;
+      flex: 1;
+    }
+
+    .agent-header-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.2rem;
+      padding: 4px;
+    }
+
+    .agent-header-close:hover {
+      color: white;
+    }
+
+    .agent-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 280px;
+      max-height: 340px;
+    }
+
+    .agent-msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+
+    .agent-msg.bot {
+      align-self: flex-start;
+      background: #f0fdf4;
+      border: 1px solid #ddeedd;
+      color: #1a2218;
+    }
+
+    .agent-msg.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #2d7a3a, #4caf62);
+      color: white;
+      border: none;
+    }
+
+    .agent-msg.typing {
+      align-self: flex-start;
+      background: #f0fdf4;
+      border: 1px solid #ddeedd;
+      color: #6b7f68;
+      font-style: italic;
+    }
+
+    .agent-msg.typing::after {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #2d7a3a;
+      margin-left: 6px;
+      animation: typingDot 1s infinite;
+    }
+
+    @keyframes typingDot {
+
+      0%,
+      100% {
+        opacity: 0.3
+      }
+
+      50% {
+        opacity: 1
+      }
+    }
+
+    .agent-input-bar {
+      padding: 12px 16px;
+      border-top: 1px solid #eef5ee;
+      display: flex;
+      gap: 8px;
+      background: white;
+    }
+
+    .agent-input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid #ddeedd;
+      font-size: 0.85rem;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .agent-input:focus {
+      border-color: #2d7a3a;
+    }
+
+    .agent-input::placeholder {
+      color: #a0b8a0;
+    }
+
+    .agent-send {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--green);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .agent-send:hover {
+      background: #3a9e4a;
+    }
+
+    .agent-send:disabled {
+      background: #b8ddbf;
+      cursor: not-allowed;
+    }
+
+    .agent-send svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+    }
+  </style>
+
+  <!-- Chat FAB Button -->
+  <button class="agent-fab" id="agentFab" onclick="toggleAgentChat()" title="Chat with AgroSignal Agent">
+    <svg viewBox="0 0 24 24">
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.2L4 17.2V4h16v12z" />
+      <path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z" />
+    </svg>
+    <div class="fab-badge"></div>
+  </button>
+
+  <!-- Chat Panel -->
+  <div class="agent-panel" id="agentPanel">
+    <div class="agent-header">
+      <div class="agent-header-dot"></div>
+      <div class="agent-header-title">AgroSignal Agent ✦</div>
+      <button class="agent-header-close" onclick="toggleAgentChat()">✕</button>
+    </div>
+    <div class="agent-messages" id="agentMessages">
+      <div class="agent-msg bot">
+        👋 Hi! I'm your <strong>AgroSignal Agent</strong>.<br><br>
+        Tell me what crop you have, how many kg, and which state you're in — I'll find the best market for you!<br><br>
+        <em>Example: "I have 300kg of durian in Pahang"</em>
+      </div>
+    </div>
+    <div class="agent-input-bar">
+      <input class="agent-input" id="agentInput" type="text" placeholder="Ask me anything about selling your crop..."
+        onkeydown="if(event.key==='Enter')sendAgentMsg()">
+      <button class="agent-send" id="agentSendBtn" onclick="sendAgentMsg()">
+        <svg viewBox="0 0 24 24">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <style>
+    .lang-picker {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .lang-btn {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 2px solid #ddeedd;
+      background: white;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.2s;
+      color: #1a2218;
+    }
+
+    .lang-btn:hover {
+      border-color: #2d7a3a;
+      background: #f0fdf4;
+    }
+
+    .lang-btn .lang-flag {
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+  </style>
+
+  <script>
+    // ══════════════════════════════════════════
+    // AGENT CHAT LOGIC
+    // ══════════════════════════════════════════
+    let agentHistory = [];
+    let agentOpen = false;
+    let agentLang = null; // 'en' or 'bm'
+
+    function toggleAgentChat() {
+      agentOpen = !agentOpen;
+      document.getElementById('agentPanel').classList.toggle('open', agentOpen);
+      if (agentOpen) {
+        if (!agentLang) {
+          // Don't focus input yet — show language picker
+        } else {
+          document.getElementById('agentInput').focus();
+        }
+      }
+    }
+
+    function selectLanguage(lang) {
+      agentLang = lang;
+      // Remove the language picker message
+      const picker = document.getElementById('langPickerMsg');
+      if (picker) picker.remove();
+
+      // Show confirmation + welcome in chosen language
+      if (lang === 'bm') {
+        addAgentMsg('🇲🇾 <strong>Bahasa Melayu</strong> dipilih!\n\nHalo! Saya agen <strong>AgroSignal</strong>. 🌾\n\nBeritahu saya tanaman apa yang anda ada, berapa kg, dan di negeri mana — saya akan carikan pasaran terbaik untuk anda!\n\n<em>Contoh: "Saya ada 300kg durian di Pahang"</em>', 'bot');
+      } else {
+        addAgentMsg('🇬🇧 <strong>English</strong> selected!\n\nHi! I\'m your <strong>AgroSignal Agent</strong>. 🌾\n\nTell me what crop you have, how many kg, and which state you\'re in — I\'ll find the best market for you!\n\n<em>Example: "I have 300kg of durian in Pahang"</em>', 'bot');
+      }
+
+      // Enable input
+      document.getElementById('agentInput').disabled = false;
+      document.getElementById('agentSendBtn').disabled = false;
+      document.getElementById('agentInput').placeholder = lang === 'bm'
+        ? 'Tanya apa sahaja tentang jualan tanaman anda...'
+        : 'Ask me anything about selling your crop...';
+      document.getElementById('agentInput').focus();
+    }
+
+    function addAgentMsg(text, role) {
+      const container = document.getElementById('agentMessages');
+      const div = document.createElement('div');
+      div.className = `agent-msg ${role}`;
+      div.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+      return div;
+    }
+
+    function addAgentHtml(html) {
+      const container = document.getElementById('agentMessages');
+      const div = document.createElement('div');
+      div.className = 'agent-msg bot';
+      div.innerHTML = html;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+      return div;
+    }
+
+    // Show language picker on first open
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('agentMessages');
+      container.innerHTML = '';
+      const div = document.createElement('div');
+      div.className = 'agent-msg bot';
+      div.id = 'langPickerMsg';
+      div.innerHTML = `
+    👋 <strong>Welcome to AgroSignal Agent!</strong><br>
+    <span style="color:#6b7f68">Selamat datang ke Agen AgroSignal!</span><br><br>
+    Please choose your language / Sila pilih bahasa anda:
+    <div class="lang-picker">
+      <button class="lang-btn" onclick="selectLanguage('en')">
+        <span class="lang-flag">🇬🇧</span>English
+      </button>
+      <button class="lang-btn" onclick="selectLanguage('bm')">
+        <span class="lang-flag">🇲🇾</span>Bahasa Melayu
+      </button>
+    </div>
+  `;
+      container.appendChild(div);
+
+      // Disable input until language is selected
+      document.getElementById('agentInput').disabled = true;
+      document.getElementById('agentInput').placeholder = 'Choose a language first...';
+      document.getElementById('agentSendBtn').disabled = true;
+    });
+
+    async function sendAgentMsg() {
+      const input = document.getElementById('agentInput');
+      const msg = input.value.trim();
+      if (!msg || !agentLang) return;
+
+      input.value = '';
+      addAgentMsg(msg, 'user');
+
+      const typingText = agentLang === 'bm' ? 'Sedang berfikir...' : 'Thinking...';
+      const typing = addAgentMsg(typingText, 'typing');
+      document.getElementById('agentSendBtn').disabled = true;
+
+      try {
+        const res = await fetch('/api/agent/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg, history: agentHistory, language: agentLang }),
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || 'Agent error');
+        }
+
+        const data = await res.json();
+        typing.remove();
+        addAgentMsg(data.reply, 'bot');
+        agentHistory = data.history;
+
+      } catch (e) {
+        typing.remove();
+        const errMsg = agentLang === 'bm'
+          ? `⚠ Ralat: ${e.message}`
+          : `⚠ Error: ${e.message}`;
+        addAgentMsg(errMsg, 'bot');
+      }
+
+      document.getElementById('agentSendBtn').disabled = false;
+      document.getElementById('agentInput').focus();
+    }
+  </script>
+
+</body>
+
+</html>

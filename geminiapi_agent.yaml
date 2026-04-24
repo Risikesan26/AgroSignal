@@ -1,0 +1,349 @@
+openapi: "3.0.3"
+info:
+  title: AgroSignal Agent Tools API
+  description: |
+    API tools for the AgroSignal Vertex AI Agent.
+    These endpoints power an AI agent that helps Malaysian farmers
+    decide where and when to sell crops for maximum profit.
+    All market data is computed from real FAMA (Federal Agricultural Marketing Authority) price records.
+  version: "1.0.0"
+
+servers:
+  - url: https://your-deployment-url.com
+    description: Production server (replace with your actual URL)
+  - url: http://localhost:8000
+    description: Local development server
+
+paths:
+  /api/analyze:
+    post:
+      operationId: analyze_crop
+      summary: Analyze crop market and find best selling region
+      description: |
+        Runs the FAMA scoring model to find the optimal state/region
+        for selling a crop. Returns real computed market prices, transport
+        costs, profit calculations, and scores for all Malaysian states.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FarmerInput"
+      responses:
+        "200":
+          description: Successful analysis with recommendation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalyzeResult"
+        "400":
+          description: Crop not found in dataset
+        "422":
+          description: Invalid input or no data for crop
+
+  /api/action/generate-plan:
+    post:
+      operationId: generate_plan
+      summary: Generate a complete AI-powered selling plan
+      description: |
+        Combines FAMA model data with Gemini AI narrative to produce
+        a full selling plan including: action steps, best days to sell,
+        before/after comparison, market analysis, and all numbers
+        needed for a PDF report.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GeneratePlanInput"
+      responses:
+        "200":
+          description: Complete selling plan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SellingPlan"
+        "400":
+          description: Crop not found
+        "502":
+          description: Gemini API error
+
+  /api/action/explain-recommendation:
+    post:
+      operationId: explain_recommendation
+      summary: Explain why a market was recommended
+      description: |
+        Uses Gemini AI to generate a farmer-friendly, natural-language
+        explanation of why a specific region was recommended.
+        Ideal for conversational follow-ups when the farmer asks "why?".
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExplainInput"
+      responses:
+        "200":
+          description: Natural language explanation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExplainResult"
+        "502":
+          description: Gemini API error
+
+  /api/weather-impact:
+    post:
+      operationId: weather_impact
+      summary: Assess weather and seasonal impact on a crop
+      description: |
+        Returns seasonal risk assessment, peak/off-peak months,
+        monsoon exposure, and timing advice for a crop in a given state.
+        Helps farmers understand weather-related risks before selling.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WeatherInput"
+      responses:
+        "200":
+          description: Weather impact assessment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WeatherResult"
+        "400":
+          description: Crop not recognised
+
+components:
+  schemas:
+    FarmerInput:
+      type: object
+      required: [crop, quantity, timing, state, transport]
+      properties:
+        crop:
+          type: string
+          description: "Crop name from the supported list"
+          example: "Banana / Pisang"
+        quantity:
+          type: number
+          description: "Quantity in kilograms"
+          example: 500
+        timing:
+          type: string
+          description: "When the harvest is ready"
+          example: "within 1 week"
+        state:
+          type: string
+          description: "Farmer's state in Malaysia"
+          example: "Selangor"
+        transport:
+          type: string
+          description: "Transport method available"
+          example: "own lorry"
+          enum: ["own lorry", "hired truck", "motorbike only", "no transport"]
+
+    GeneratePlanInput:
+      type: object
+      required: [crop, quantity, timing, state]
+      properties:
+        crop:
+          type: string
+          example: "Banana / Pisang"
+        quantity:
+          type: number
+          example: 500
+        timing:
+          type: string
+          example: "within 1 week"
+        state:
+          type: string
+          example: "Selangor"
+        transport:
+          type: string
+          default: "own lorry"
+          example: "own lorry"
+
+    ExplainInput:
+      type: object
+      required: [crop, state, bestRegion, marketPrice, localPrice, profitGain]
+      properties:
+        crop:
+          type: string
+          example: "Banana / Pisang"
+        state:
+          type: string
+          example: "Selangor"
+        bestRegion:
+          type: string
+          example: "Johor"
+        marketPrice:
+          type: number
+          example: 4.50
+        localPrice:
+          type: number
+          example: 3.20
+        profitGain:
+          type: number
+          example: 650
+
+    WeatherInput:
+      type: object
+      required: [state, crop]
+      properties:
+        state:
+          type: string
+          example: "Selangor"
+        crop:
+          type: string
+          example: "Banana / Pisang"
+
+    AnalyzeResult:
+      type: object
+      properties:
+        bestRegion:
+          type: string
+        estimatedMarketPrice:
+          type: number
+        estimatedLocalPrice:
+          type: number
+        totalRevenue:
+          type: number
+        localRevenue:
+          type: number
+        profitGainPerKg:
+          type: number
+        totalProfitGain:
+          type: number
+        distanceKm:
+          type: integer
+        transportCostRM:
+          type: number
+        netProfitAfterTransport:
+          type: number
+        finalScore:
+          type: number
+        allStates:
+          type: array
+          items:
+            type: object
+
+    SellingPlan:
+      type: object
+      properties:
+        bestRegion:
+          type: string
+        estimatedMarketPrice:
+          type: number
+        estimatedLocalPrice:
+          type: number
+        totalProfitGain:
+          type: number
+        totalRevenue:
+          type: number
+        localRevenue:
+          type: number
+        transportCostRM:
+          type: number
+        netProfitAfterTransport:
+          type: number
+        distanceKm:
+          type: integer
+        travelHours:
+          type: number
+        finalScore:
+          type: number
+        bestMarketCity:
+          type: string
+        demandLevel:
+          type: string
+        bestDays:
+          type: array
+          items:
+            type: string
+        goodDays:
+          type: array
+          items:
+            type: string
+        actionText:
+          type: string
+        actionSub:
+          type: string
+        shortReason:
+          type: string
+        reasonChips:
+          type: array
+          items:
+            type: string
+        beforePoints:
+          type: array
+          items:
+            type: string
+        afterPoints:
+          type: array
+          items:
+            type: string
+        fullAnalysis:
+          type: string
+        input:
+          type: object
+          properties:
+            crop:
+              type: string
+            quantity:
+              type: number
+            timing:
+              type: string
+            state:
+              type: string
+            transport:
+              type: string
+
+    ExplainResult:
+      type: object
+      properties:
+        explanation:
+          type: string
+        keyFactors:
+          type: array
+          items:
+            type: string
+        riskNotes:
+          type: string
+        confidence:
+          type: string
+          enum: ["high", "medium", "low"]
+
+    WeatherResult:
+      type: object
+      properties:
+        crop:
+          type: string
+        state:
+          type: string
+        currentMonth:
+          type: string
+        peakMonths:
+          type: array
+          items:
+            type: string
+        offPeakMonths:
+          type: array
+          items:
+            type: string
+        riskMonths:
+          type: array
+          items:
+            type: string
+        seasonalNotes:
+          type: string
+        monsoonRisk:
+          type: string
+          enum: ["low", "medium", "high", "unknown"]
+        isRiskMonth:
+          type: boolean
+        isPeakSeason:
+          type: boolean
+        timingAdvice:
+          type: string
