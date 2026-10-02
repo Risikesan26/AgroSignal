@@ -1,5 +1,5 @@
 # 🌾 AgroSignal AI: Next-Gen Agricultural Intelligence
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Site-blue?style=for-the-badge)](https://agrosignal-583139806956.us-central1.run.app/)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Site-blue?style=for-the-badge)](https://agro-signal.vercel.app/)
 [![🎥 Video Demo](https://img.shields.io/badge/🎥_Video_Demo-Watch_Now-red?style=for-the-badge)](https://youtu.be/7oj0pwFyWrk)
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
